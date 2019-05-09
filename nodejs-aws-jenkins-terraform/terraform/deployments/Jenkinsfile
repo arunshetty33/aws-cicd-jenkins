@@ -9,7 +9,7 @@ pipeline{
             steps{
                     sh '''#!/bin/bash
                     cd nodejs-aws-jenkins-terraform/terraform
-                    ARTIFACT_API=`packer build -machine-readable packer-ami-api.json  |awk -F, '$0 ~/artifact,0,id/ {print $6}'` --output json
+                    ARTIFACT_API=`packer build -machine-readable packer-ami-api.json  |awk -F, '$0 ~/artifact,0,id/ {print $6}'`
                     AMI_ID_API=`echo $ARTIFACT_API | cut -d ':' -f2`
                     echo 'variable "API_INSTANCE_AMI" { default = "'${AMI_ID_API}'" }' > amivar_API.tf
                     aws s3 cp amivar_API.tf s3://cicd-node-aws-jenkins-terraform/amivar_api.tf
@@ -21,12 +21,43 @@ pipeline{
             steps{
                     sh '''#!/bin/bash
                     cd nodejs-aws-jenkins-terraform/terraform
-                    ARTIFACT_WEB=`packer build -machine-readable packer-ami-web.json  |awk -F, '$0 ~/artifact,0,id/ {print $6}'` --output json
+                    ARTIFACT_WEB=`packer build -machine-readable packer-ami-web.json  |awk -F, '$0 ~/artifact,0,id/ {print $6}'`
                     AMI_ID_WEB=`echo $ARTIFACT_WEB | cut -d ':' -f2`
                     echo 'variable "WEB_INSTANCE_AMI" { default = "'${AMI_ID_WEB}'" }' > amivar_web.tf
                     aws s3 cp amivar_web.tf s3://cicd-node-aws-jenkins-terraform/amivar_web.tf
                     '''
         }
+
         }
+        stage("Terraform init"){
+            steps{
+                    sh '''#!/bin/bash
+                    set +x
+                    cd nodejs-aws-jenkins-terraform/terraform
+                    aws s3 copy s3://cicd-node-aws-jenkins-terraform/amivar_api.tf amivar_api.tf
+                    aws s3 copy s3://cicd-node-aws-jenkins-terraform/amivar_web.tf amivar_web.tf
+                    terraform init
+                    '''
+            }
+        }
+
+        stage("Terraform plan"){
+            steps{
+                    sh '''#!/bin/bash
+                    set +x
+                    terraform plan
+                    '''
+            }
+        }
+        
+        stage("Terraform apply"){
+            steps{
+                    sh '''#!/bin/bash
+                    set +x
+                    terraform apply -auto-aprove
+                    '''
+            }
+        }
+
     }
 }
