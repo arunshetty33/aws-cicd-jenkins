@@ -17,7 +17,7 @@ pipeline{
             }
         }
         }
-    stages{
+    
         stage("Build WEB AMI"){
             steps{
                     sh '''#!/bin/bash
@@ -27,7 +27,6 @@ pipeline{
                     echo 'variable "WEB_INSTANCE_AMI" { default = "'${AMI_ID_WEB}'" }' > amivar_web.tf
                     aws s3 cp amivar_web.tf s3://cicd-node-aws-jenkins-terraform/amivar_web.tf
                     '''
-            }
         }
     }
 }
