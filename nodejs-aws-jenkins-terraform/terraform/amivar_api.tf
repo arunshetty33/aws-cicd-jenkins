@@ -1,1 +1,1 @@
-variable "API_INSTANCE_AMI" { default = "ami-0b947db77c91dcac6" }
+variable "API_INSTANCE_AMI" { default = "ami-02ab7aae721976b69" }
