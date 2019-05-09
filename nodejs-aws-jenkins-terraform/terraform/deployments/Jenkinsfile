@@ -1,7 +1,6 @@
 pipeline{
     agent any
     stages{
-        wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
         stage("Create IMAGE"){
             steps{
                 dir("nodejs-aws-jenkins-terraform/terraform")
@@ -11,7 +10,6 @@ pipeline{
                     echo 'variable "API_INSTANCE_AMI" { default = "'${AMI_ID_API}'" }' > amivar_API.tf
                     aws s3 cp amivar_API.tf s3://cicd-node-aws-jenkins-terraform/amivar_api.tf
                     '''
-            }
         }
         }
     }
