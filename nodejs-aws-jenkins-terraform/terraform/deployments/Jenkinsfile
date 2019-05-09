@@ -8,6 +8,7 @@ pipeline{
         stage("Build API AMI"){
             steps{
                     sh '''#!/bin/bash
+                    set +x
                     cd nodejs-aws-jenkins-terraform/terraform
                     ARTIFACT_API=`packer build -machine-readable packer-ami-api.json  |awk -F, '$0 ~/artifact,0,id/ {print $6}'`
                     AMI_ID_API=`echo $ARTIFACT_API | cut -d ':' -f2`
@@ -20,6 +21,7 @@ pipeline{
         stage("Build WEB AMI"){
             steps{
                     sh '''#!/bin/bash
+                    set +x
                     cd nodejs-aws-jenkins-terraform/terraform
                     ARTIFACT_WEB=`packer build -machine-readable packer-ami-web.json  |awk -F, '$0 ~/artifact,0,id/ {print $6}'`
                     AMI_ID_WEB=`echo $ARTIFACT_WEB | cut -d ':' -f2`
