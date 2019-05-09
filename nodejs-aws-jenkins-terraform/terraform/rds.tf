@@ -55,8 +55,6 @@ resource "aws_security_group" "allow-postgresdb" {
     Name = "allow-postgresdb"
   }
 }
-
-
 output "rds-private-ip" {
   value = "${aws_db_instance.postgres.address}"
 }
