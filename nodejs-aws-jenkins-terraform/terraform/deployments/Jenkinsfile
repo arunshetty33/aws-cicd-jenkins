@@ -1,9 +1,9 @@
 pipeline{
-    agent{ any }
+    agent any
     stages{
-        wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
         stage("Create IMAGE"){
             steps{
+                wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
                 dir("nodejs-aws-jenkins-terraform/terraform")
                     sh '''#!/bin/bash
                     ARTIFACT_API=`packer build -machine-readable packer-ami-api.json  |awk -F, '$0 ~/artifact,0,id/ {print $6}'`
