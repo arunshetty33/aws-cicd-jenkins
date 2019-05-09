@@ -5,6 +5,12 @@ pipeline{
     }
     
     stages{
+        stage("Git Checkout"){
+            steps{
+                git credentialsId: 'f0063021-08b9-41b3-9603-3f091d0616e3', url: 'https://github.com/arunshetty33/aws-cicd-jenkins.git'
+            }
+        }
+        
         stage("Terraform init"){
             steps{
                     sh '''#!/bin/bash
@@ -32,7 +38,7 @@ pipeline{
                     sh '''#!/bin/bash
                     set +x
                     cd nodejs-aws-jenkins-terraform/terraform
-                    terraform apply -auto-aprove
+                    terraform apply -auto-approve
                     '''
             }
         }
