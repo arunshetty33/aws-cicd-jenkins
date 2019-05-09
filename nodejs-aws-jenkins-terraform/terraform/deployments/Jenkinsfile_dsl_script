@@ -1,0 +1,47 @@
+pipeline{
+    agent any
+    options {
+        ansiColor('xterm')
+    }
+    
+    stages{
+        stage("Git Checkout"){
+            steps{
+                git credentialsId: 'f0063021-08b9-41b3-9603-3f091d0616e3', url: 'https://github.com/arunshetty33/aws-cicd-jenkins.git'
+            }
+        }
+        
+        stage("Terraform init"){
+            steps{
+                    sh '''#!/bin/bash
+                    set +x
+                    cd nodejs-aws-jenkins-terraform/terraform
+                    aws s3 cp s3://cicd-node-aws-jenkins-terraform/amivar_api.tf amivar_api.tf
+                    aws s3 cp s3://cicd-node-aws-jenkins-terraform/amivar_web.tf amivar_web.tf
+                    terraform init
+                    '''
+            }
+        }
+
+        stage("Terraform plan"){
+            steps{
+                    sh '''#!/bin/bash
+                    set +x
+                    cd nodejs-aws-jenkins-terraform/terraform
+                    terraform plan
+                    '''
+            }
+        }
+        
+        stage("Terraform apply"){
+            steps{
+                    sh '''#!/bin/bash
+                    set +x
+                    cd nodejs-aws-jenkins-terraform/terraform
+                    terraform apply -auto-approve
+                    '''
+            }
+        }
+
+    }
+}
