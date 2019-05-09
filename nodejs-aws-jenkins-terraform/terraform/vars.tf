@@ -1,5 +1,5 @@
 variable "RDS_PASSWORD" {
-  default = "somepassword"
+  default = "password@1234"
 }
 
 variable "API_PORT" {
