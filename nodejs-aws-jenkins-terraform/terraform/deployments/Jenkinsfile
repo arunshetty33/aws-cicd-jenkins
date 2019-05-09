@@ -14,7 +14,6 @@ pipeline{
                     echo 'variable "API_INSTANCE_AMI" { default = "'${AMI_ID_API}'" }' > amivar_API.tf
                     aws s3 cp amivar_API.tf s3://cicd-node-aws-jenkins-terraform/amivar_api.tf
                     '''
-                    returnStdout: true,
             }
         }
     
