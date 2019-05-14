@@ -36,6 +36,7 @@ pipeline{
                     cd nodejs-aws-jenkins-terraform/terraform
                     aws s3 copy s3://cicd-node-aws-jenkins-terraform/amivar_api.tf amivar_api.tf
                     aws s3 copy s3://cicd-node-aws-jenkins-terraform/amivar_web.tf amivar_web.tf
+                    rm -rf amivar_API.tf
                     terraform init
                     '''
             }
