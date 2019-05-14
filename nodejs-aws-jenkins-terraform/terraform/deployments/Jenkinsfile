@@ -32,9 +32,8 @@ pipeline{
         stage("Terraform init"){
             steps{
                     sh '''#!/bin/bash
-                    set +x
                     cd nodejs-aws-jenkins-terraform/terraform
-                    rm -rf amivar_API.tf
+                    set +x
                     aws s3 copy s3://cicd-node-aws-jenkins-terraform/amivar_api.tf amivar_api.tf
                     aws s3 copy s3://cicd-node-aws-jenkins-terraform/amivar_web.tf amivar_web.tf
                     terraform init
@@ -45,6 +44,7 @@ pipeline{
         stage("Terraform plan"){
             steps{
                     sh '''#!/bin/bash
+                    cd nodejs-aws-jenkins-terraform/terraform
                     set +x
                     terraform plan
                     '''
@@ -54,8 +54,9 @@ pipeline{
         stage("Terraform apply"){
             steps{
                     sh '''#!/bin/bash
+                    cd nodejs-aws-jenkins-terraform/terraform
                     set +x
-                    terraform apply -auto-aprove
+                    terraform apply -auto-approve
                     '''
             }
         }
