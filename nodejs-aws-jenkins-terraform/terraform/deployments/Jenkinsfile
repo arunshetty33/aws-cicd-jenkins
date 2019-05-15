@@ -52,8 +52,8 @@ pipeline{
       }
 
         stage("Terraform apply"){
+          def build = input(id: 'build',message: "Do you want to Deploy ?. Press Proceed to continue",type: "boolean")
             steps{
-                    def build = input(id: 'build',message: "Do you want to Deploy ?. Press Proceed to continue",type: "boolean")
                     sh '''#!/bin/bash
                     set +x
                     cd nodejs-aws-jenkins-terraform/terraform
