@@ -55,7 +55,6 @@ pipeline{
           input {
             message "Do you want to Deploy ?"
             ok "Press Proceed to continue"
-            type "boolean"
           }
           steps{
                   sh '''#!/bin/bash
