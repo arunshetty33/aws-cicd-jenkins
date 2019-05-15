@@ -52,10 +52,6 @@ pipeline{
       }
 
         stage("Terraform apply"){
-          input {
-            message "Do you want to Deploy ?"
-            ok "Press Proceed to continue"
-          }
           steps{
                   sh '''#!/bin/bash
                   set +x
