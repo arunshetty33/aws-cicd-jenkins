@@ -24,6 +24,7 @@ resource "aws_autoscaling_group" "api-autoscaling" {
   health_check_type         = "ELB"
   load_balancers            = ["${aws_elb.api-elb.name}"]
   force_delete              = true
+  termination_policies      = ["OldestLaunchConfiguration"]
 
   lifecycle {
     create_before_destroy = true
