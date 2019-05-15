@@ -3,20 +3,22 @@ pipeline{
     options {
         ansiColor('xterm')
     }
-    
+
     stages{
+      wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
         stage("Build API AMI"){
             steps{
                     sh '''#!/bin/bash
                     cd nodejs-aws-jenkins-terraform/terraform
                     ARTIFACT_API=`packer build -machine-readable packer-ami-api.json  |awk -F, '$0 ~/artifact,0,id/ {print $6}'`
                     AMI_ID_API=`echo $ARTIFACT_API | cut -d ':' -f2`
-                    echo 'variable "API_INSTANCE_AMI" { default = "'${AMI_ID_API}'" }' > amivar_API.tf
+                    echo 'variable "API_INSTANCE_AMI" { default = "'${AMI_ID_API}'" }' > amivar_api.tf
                     aws s3 cp amivar_API.tf s3://cicd-node-aws-jenkins-terraform/amivar_api.tf
                     '''
             }
         }
-    
+      }
+    wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
         stage("Build WEB AMI"){
             steps{
                     sh '''#!/bin/bash
@@ -27,8 +29,9 @@ pipeline{
                     aws s3 cp amivar_web.tf s3://cicd-node-aws-jenkins-terraform/amivar_web.tf
                     '''
         }
-
-        }
+      }
+    }
+      wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
         stage("Terraform init"){
             steps{
                     sh '''#!/bin/bash
@@ -40,7 +43,8 @@ pipeline{
                     '''
             }
         }
-
+      }
+      wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
         stage("Terraform plan"){
             steps{
                     sh '''#!/bin/bash
@@ -49,7 +53,8 @@ pipeline{
                     '''
             }
         }
-        
+      }
+      wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
         stage("Terraform apply"){
             steps{
                     sh '''#!/bin/bash
@@ -60,4 +65,5 @@ pipeline{
         }
 
     }
+  }
 }
