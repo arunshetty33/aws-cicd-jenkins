@@ -13,7 +13,7 @@ resource "aws_launch_configuration" "web-launchconfig" {
 }
 
 resource "aws_autoscaling_group" "web-autoscaling" {
-  name = "${aws_launch_configuration.web-launchconfig.name}-asg"
+  name = "web-demo-asg"
 
   vpc_zone_identifier       = ["${aws_subnet.main-public-1.id}"]
   launch_configuration      = "${aws_launch_configuration.web-launchconfig.name}"
