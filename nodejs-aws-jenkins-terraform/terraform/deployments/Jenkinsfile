@@ -7,6 +7,8 @@ pipeline{
     stages{
         stage("Build API AMI"){
             steps{
+             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: '962100578745', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
+            }       {
                     sh '''#!/bin/bash
                     cd nodejs-aws-jenkins-terraform/terraform
                     ARTIFACT_API=`packer build -machine-readable packer-ami-api.json  |awk -F, '$0 ~/artifact,0,id/ {print $6}'`
@@ -15,6 +17,7 @@ pipeline{
                     aws s3 cp amivar_api.tf s3://cicd-node-aws-jenkins-terraform/amivar_api.tf
                     '''
             }
+        }
       }
         stage("Build WEB AMI"){
             steps{
