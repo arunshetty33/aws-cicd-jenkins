@@ -18,7 +18,6 @@ pipeline{
                     aws s3 cp amivar_api.tf s3://cicd-node-aws-jenkins-terraform/amivar_api.tf
                     '''
             }
-        }
         stage("Build WEB AMI"){
             steps{
                     sh '''#!/bin/bash
